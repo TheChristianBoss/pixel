@@ -1,0 +1,33 @@
+; Pixel Board global scaling example — draw once in native 320×180 pixel coordinates.
+; Change only //output to produce another size. No geometry commands need editing.
+//design 320 180
+//output 960 540
+//fit contain
+//sampling nearest
+//canvas #17213D
+; Sky and distant hills
+//cyl 261 37 24 #F6CF70
+//polygon 0 112 45 66 105 112 #294B77
+//polygon 45 117 137 46 226 117 #3B5C83
+//polygon 183 117 277 61 319 118 #283F69
+//rect 0 108 319 137 #2E5470
+; Foreground grass and path
+//rect 0 137 319 179 #2C664B
+//rect 0 137 319 140 #5D9F5B
+//polygon 113 179 141 143 187 143 216 179 #CBA773
+//rect 29 141 59 144 #86BF67
+//rect 246 146 282 149 #86BF67
+; Little house made with coordinate shapes
+//rect 114 98 188 145 #C29A7B
+//rect 115 98 187 102 #F0BC83
+//polygon 107 100 150 68 194 100 #5B314A
+//polygon 116 94 150 73 183 94 #8A4960
+//rect 142 119 159 145 #5A3841
+//rect 171 110 183 123 #FFE0A4
+//rect 120 109 131 122 #FFE0A4
+; Reusable 48x48 sprite assets
+//sprite icons_r00_c00 32 95 1
+//sprite tiles_r01_c00 251 104 1
+; Title drawn at native coordinate resolution
+//text 12 11 22 #FFFFFF DRAW ONCE
+//text 12 37 12 #FFE5A0 EXPORT AT ANY SIZE
