@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Pixel Board — Full Geometry + Editable Text</title>
+<title>Pixel Board — Command Art Studio</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
@@ -234,11 +234,36 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
 .brush-types button:hover { border-color:var(--accent); }
 @media(max-width:880px) { .work { grid-template-columns: minmax(0,1fr); } .panel { order:2; } #we-input { min-height:145px; } }
 
+
+
+/* Command-focused workspace — November 2026 */
+:root { --command-panel-width: clamp(370px, 31vw, 520px); }
+.work { grid-template-columns: 70px minmax(0, 1fr) var(--command-panel-width); gap:10px; }
+.panel { overscroll-behavior: contain; padding: 13px; }
+.we-shell { gap: 12px; }
+.we-heading h2 { font-size: 15px; }
+#we-input { min-height: 255px; height: min(34vh, 330px); resize: vertical; font-size: 12px; line-height: 1.6; }
+.we-actions button, .we-coord-buttons button { padding: 8px 10px; }
+.we-actions .primary { font-weight: 650; }
+.we-output { height: 78px; min-height: 60px; }
+.we-switches { border-radius:6px; padding:8px 10px; background:var(--bg); gap: 18px; }
+.we-fold { border: 1px solid var(--line); border-radius:8px; background:var(--bg); }
+.we-fold > summary { cursor:pointer; padding:11px 12px; font-size:12px; font-weight:650; line-height:1.5; }
+.we-fold[open] > summary { border-bottom:1px solid var(--line); }
+.we-fold-content { display:flex; flex-direction:column; gap:13px; padding:12px 10px; }
+.we-fold-content .we-advanced, .we-fold-content .we-scaling { background: var(--panel); }
+@media (min-width:881px) and (max-width:1100px) {
+  :root { --command-panel-width: 355px; }
+}
+@media (max-width:880px) {
+  .work { grid-template-columns:minmax(0,1fr); }
+  #we-input { height:220px; }
+}
 </style>
 
 <div class="app">
   <header class="top">
-    <h1>Pixel Board · Global Scaling Studio</h1>
+    <h1>Pixel Board</h1>
     <div class="res" id="res" role="group" aria-label="Canvas resolution"></div>
     <div class="actions">
       <button class="btn" id="undo" title="Undo (Ctrl+Z)" disabled>Undo</button>
@@ -280,8 +305,23 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
 
     <aside class="panel" aria-label="Commands, colour and brush">
       <section class="we-shell" aria-labelledby="we-heading">
-        <div class="we-heading"><h2 id="we-heading">Command studio</h2><span class="we-badge">WORLD EDIT / 2D</span></div>
+        <div class="we-heading"><h2 id="we-heading">Command studio</h2><span class="we-badge">COORDINATE DRAWING</span></div>
         <p class="fine">Build an entire picture from coordinates—one drawing command per line. Manual tools still work.</p>
+        <div class="we-switches"><label><input type="checkbox" id="we-grid"> Grid + rulers</label><label><input type="checkbox" id="we-centermark"> Center crosshair</label></div>
+        <label class="we-input-label" for="we-input">Drawing script · X increases right, Y increases down · Ctrl/⌘ + Enter to run</label>
+        <textarea id="we-input" rows="8" spellcheck="false" autocomplete="off" aria-label="WorldEdit-style command editor" placeholder="//pos1 25% 25%&#10;//pos2 75% 75%&#10;//set #36B6BA&#10;//cyl center center 140 #FFCC66"></textarea>
+        <div class="we-actions">
+          <button type="button" class="btn" id="we-runline" title="Run the command on the line holding the text cursor">Run line</button>
+          <button type="button" class="btn primary" id="we-run">Run all</button>
+          <button type="button" class="btn" id="we-clear">Clear text</button>
+        </div>
+        <div class="we-coord-buttons">
+          <button type="button" id="we-import">Import .txt script</button>
+          <button type="button" id="we-download">Save command script</button>
+          <input type="file" id="we-upload" accept=".txt,.we,.commands,text/plain" hidden>
+        </div>
+        <div class="we-output" id="we-output" role="status" aria-live="polite"></div>
+
         <div class="we-coords" aria-label="Canvas coordinate bounds">
           <div><small>Origin → bottom-right</small><strong id="we-bounds">(0,0) → (2559,1439)</strong></div>
           <div><small>Center (cx,cy)</small><strong id="we-center">(1280,720)</strong></div>
@@ -292,7 +332,10 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
           <div class="we-selection-foot"><span id="we-selection-size">Drag Select to mark an area</span><button type="button" id="we-reset">Deselect</button></div>
         </div>
         <div class="we-coord-buttons"><button type="button" id="we-insertcursor" title="Insert cursor X and Y into the script">Insert X Y</button><button type="button" id="we-insertselect" title="Insert selection corners as a //sel command">Insert selection</button></div>
-        <div class="we-switches"><label><input type="checkbox" id="we-grid" checked> Grid + rulers</label><label><input type="checkbox" id="we-centermark" checked> Center crosshair</label></div>
+        
+        <details class="we-fold" id="we-more-tools">
+          <summary>Presets, sprites, image import, text &amp; output scaling</summary>
+          <div class="we-fold-content">
         <div class="we-presets" aria-label="Insert drawing command presets">
           <button type="button" data-we-preset="frame" title="Add a border around a percentage-based selection">Frame</button>
           <button type="button" data-we-preset="circle">Circle</button>
@@ -341,20 +384,9 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
           <div id="scale-status" class="we-scaling-status" role="status" aria-live="polite">No resampling until export.</div>
           <p class="fine">Drawing stays in its native coordinate space. Export scales the result; transparent margins are used for Contain and Native. Nearest at integer enlargement preserves source pixels.</p>
         </div>
-<div class="we-workflow">1. Select an aspect ratio. 2. Load the landscape or type commands using X Y. 3. Run all to draw the entire image. No mouse drawing required.</div>
-        <label class="we-input-label" for="we-input">Drawing script · X increases right, Y increases down · Ctrl/⌘ + Enter to run</label>
-        <textarea id="we-input" rows="8" spellcheck="false" autocomplete="off" aria-label="WorldEdit-style command editor" placeholder="//pos1 25% 25%&#10;//pos2 75% 75%&#10;//set #36B6BA&#10;//cyl center center 140 #FFCC66"></textarea>
-        <div class="we-actions">
-          <button type="button" class="btn" id="we-runline" title="Run the command on the line holding the text cursor">Run line</button>
-          <button type="button" class="btn primary" id="we-run">Run all</button>
-          <button type="button" class="btn" id="we-clear">Clear text</button>
-        </div>
-        <div class="we-coord-buttons">
-          <button type="button" id="we-import">Import .txt script</button>
-          <button type="button" id="we-download">Save command script</button>
-          <input type="file" id="we-upload" accept=".txt,.we,.commands,text/plain" hidden>
-        </div>
-        <div class="we-output" id="we-output" role="status" aria-live="polite"></div>
+          </div>
+        </details>
+
         <details class="we-help" id="we-help">
           <summary>Command reference + examples</summary>
           <p>Pixels start at <code>(0,0)</code> in the top-left. X increases right; Y increases down. <code>center</code> and percentages always use the selected canvas size. Use <code>fg</code> or <code>bg</code> for toolbar colors. Absolute coordinates are pixels. Example: <code>center-100</code> or <code>75%</code>. Radii can use pixels or percentages of the shorter canvas dimension.</p>
@@ -1116,8 +1148,8 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
   /* ---------- WorldEdit-inspired 2D command engine ---------- */
   var weClipboard = null;
   var weSelecting = false;
-  var weGrid = true;
-  var weCenterMark = true;
+  var weGrid = false;
+  var weCenterMark = false;
   var weLog = [];
 
   function boardCenter(b) { return { x: Math.floor(b.w / 2), y: Math.floor(b.h / 2) }; }
