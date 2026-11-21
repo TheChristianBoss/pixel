@@ -1,0 +1,20 @@
+; SIX BRUSH TYPES — 16:9 demo (percentage coordinates work on all canvases)
+//canvas #0D1324
+//width 40
+//brushshape square
+//stroke 12% 18% 88% 18% #FF924A
+//brushshape round
+//stroke 12% 30% 88% 30% #5CD6FF
+//brushshape diamond
+//stroke 12% 42% 88% 42% #AC89FF
+//brushshape spray
+//width 65
+//stroke 12% 54% 88% 54% 70%#FC347C,30%#FFCB6F
+//brushshape soft
+//stroke 12% 68% 88% 68% #67EFC2 110
+//brushshape calligraphy
+//stroke 12% 82% 88% 82% #FFFFFF 70
+//brushshape round
+//width 24
+//stamp center center #ED2566
+//hrect 5% 5% 95% 95% #FFFFFF 10
