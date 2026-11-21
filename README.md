@@ -33,6 +33,21 @@ Open [index.html](index.html) in a modern browser. No build step or server is re
 
 The editor provides an in-app command reference with the supported argument order and syntax.
 
+
+## Timelapse video export
+
+In the **Command studio**, enable **Generation timelapse → Record with Run all** before running a script. Choose:
+
+- **Commands / second:** 60 or 120 for the nominal playback speed.
+- **Video frame rate:** 60 or 120 FPS. Actual encoded frame delivery may be limited by the browser/device.
+- **Max video duration:** 10, 20, or 30 seconds. Long scripts are automatically accelerated to fit the cap, so they do **not** play for hours.
+- **Resolution:** up to 540p or 720p, preserving the canvas aspect ratio.
+- **Auto-download:** optionally save a PNG as soon as the image is complete and a separate WebM video when encoding finishes. Manual download buttons remain available.
+
+The video is generated **locally in your browser**, not uploaded to YouTube, GitHub, or an external server. WebCodecs VP8 is used where available for offline encoding; otherwise MediaRecorder is used for a real-time fallback. Leave the tab open until the recording finishes. Browser permissions may be required for multiple automatic downloads.
+
+For large `//rect` scripts and `//pixels` scripts, Pixel Board generates the image via the existing fast path first, allowing the PNG to be saved before the video is done encoding. For standard drawing commands, it captures frames while executing the commands. The native image resolution and editable script are unaffected by the video settings.
+
 ## Development notes
 
 The editor is currently a **single self-contained HTML application** with its JavaScript and bundled sprite-presets embedded. This initial repository import keeps it simple to run and review. Larger reference-image experiments and screenshots that may contain personal information are intentionally not included in the public repository.
