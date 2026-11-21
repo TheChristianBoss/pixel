@@ -1,0 +1,34 @@
+; Crisp editable typography + reusable sprite commands
+; All text is rendered from font glyphs at the native design resolution.
+//design 1280 720
+//output native
+//fit contain
+//sampling nearest
+//canvas #111932
+//gradient 0 0 max max #111932 #342051 horizontal
+//rect 62 45 1217 676 #080F28
+//hrect 62 45 1217 676 #27D8FB 6
+//rect 85 70 1195 230 #26164F
+//line 100 238 1180 238 #F830D0 5
+//font sans-serif
+//textstyle bold
+//textalign center
+//textoutline #040617 10
+//textshadow 5 8 7 #902EED
+//text center 62 116 #FFF8FA 48x48 SPRITES
+//textoutline #0B0828 4
+//textshadow 2 3 4 #AA1DD2
+//text center 205 48 #E3D6FF BUILD SCENES WITH COMMANDS
+//textshadow 0 0 0 #000000
+//textoutline #0B0828 0
+//rect 150 306 410 555 #202F52
+//rect 505 306 765 555 #202F52
+//rect 860 306 1120 555 #202F52
+//sprite icons_r00_c00 180 335 4
+//sprite characters_r00_c00 535 335 4
+//sprite tiles_r01_c00 890 335 4
+//font monospace
+//textstyle bold
+//textalign center
+//textoutline #000A18 1
+//text center 564 25 #7CEFFF COORDINATE COMMANDS + REAL GLYPHS
